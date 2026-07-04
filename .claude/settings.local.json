@@ -79,7 +79,9 @@
       "Bash(rm wrangler.toml)",
       "Bash(rm -rf .wrangler)",
       "PowerShell(Get-Process | Where-Object { $_.Name -match \"node|wrangler|miniflare\" } | Select-Object Id, Name, MainWindowTitle)",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "Bash(Find \"c:\\\\Users\\\\frede\\\\Documents\\\\Clientes\\\\1_Websites\\\\Tovar\\\\fit-web-wip\\\\src\" -type f -name \"*.ts\" -o -name \"*.js\")",
+      "Bash(Select-String -Pattern \"\\(middleware|redirect\\)\" -ErrorAction SilentlyContinue)"
     ]
   }
 }
