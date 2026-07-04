@@ -74,7 +74,8 @@
       "Bash(pnpm add *)",
       "Bash(Select-String -Path \"c:\\\\Users\\\\frede\\\\Documents\\\\Clientes\\\\1_Websites\\\\Tovar\\\\fit-web-wip\\\\dist\\\\_worker.js\" -Pattern \"newsletter\" -SimpleMatch)",
       "Bash(Select-Object -First 5)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(npm run *)"
     ]
   }
 }

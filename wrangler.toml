@@ -1,5 +1,6 @@
 name = "fundacion"
 compatibility_date = "2025-07-03"
+main = "./dist/_worker.js/index.js"
 
 [assets]
 directory = "./dist"
