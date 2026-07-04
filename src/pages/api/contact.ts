@@ -10,8 +10,10 @@ function errorResponse(error: string, status: number) {
   });
 }
 
-export const POST: APIRoute = async ({ request }) => {
-  const apiKey = import.meta.env.RESEND_API_KEY;
+export const POST: APIRoute = async ({ request, locals }) => {
+  const env = locals.runtime?.env ?? import.meta.env;
+
+  const apiKey = env.RESEND_API_KEY;
   if (!apiKey) return errorResponse("server_misconfigured", 500);
 
   let formData: FormData;

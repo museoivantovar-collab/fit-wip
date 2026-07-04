@@ -2,10 +2,12 @@ import type { APIRoute } from "astro";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
-  const apiKey = import.meta.env.MAILCHIMP_API_KEY;
-  const listId = import.meta.env.MAILCHIMP_LIST_ID;
-  const dc = import.meta.env.MAILCHIMP_DC;
+export const POST: APIRoute = async ({ request, locals }) => {
+  const env = locals.runtime?.env ?? import.meta.env;
+
+  const apiKey = env.MAILCHIMP_API_KEY;
+  const listId = env.MAILCHIMP_LIST_ID;
+  const dc = env.MAILCHIMP_DC;
 
   if (!apiKey || !listId || !dc) {
     return new Response(JSON.stringify({ error: "server_misconfigured" }), {
