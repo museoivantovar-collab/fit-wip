@@ -15,6 +15,12 @@ const contactFormTranslations = {
       subirImagen: "Subir imagen",
     },
     submit: "Enviar",
+    ui: {
+      sending: "Enviando...",
+      success: "¡Mensaje enviado! Te contactaremos pronto.",
+      error: "Error al enviar. Por favor intenta de nuevo.",
+      filePrefix: "Archivo: ",
+    },
   },
   en: {
     heading: "Contact us for:",
@@ -30,6 +36,12 @@ const contactFormTranslations = {
       subirImagen: "Upload image",
     },
     submit: "Send",
+    ui: {
+      sending: "Sending...",
+      success: "Message sent! We will get back to you soon.",
+      error: "Failed to send. Please try again.",
+      filePrefix: "File: ",
+    },
   },
   fr: {
     heading: "Contactez-nous pour :",
@@ -45,6 +57,12 @@ const contactFormTranslations = {
       subirImagen: "Télécharger une image",
     },
     submit: "Envoyer",
+    ui: {
+      sending: "Envoi en cours...",
+      success: "Message envoyé ! Nous vous contacterons bientôt.",
+      error: "Échec de l'envoi. Veuillez réessayer.",
+      filePrefix: "Fichier : ",
+    },
   },
 } satisfies Record<Locale, unknown>;
 

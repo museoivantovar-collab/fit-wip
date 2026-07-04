@@ -9,6 +9,9 @@ interface Props {
 const { lang } = Astro.props;
 const t = useContactFormTranslations(lang);
 
+const uiStrings = { ...t.ui, submit: t.submit };
+const defaultFileLabel = t.fields.subirImagen;
+
 const tabs = [
   { key: "conservacion", label: t.tabs.conservacion },
   { key: "certificar",   label: t.tabs.certificar   },
@@ -75,7 +78,7 @@ const panelBg: Record<string, string> = {
       </div>
 
       <!-- Form -->
-      <form method="POST" class="flex flex-col gap-4" novalidate>
+      <form action="/api/contact" method="POST" class="flex flex-col gap-4" novalidate data-contact-form>
         <input type="hidden" name="tipo" data-tipo-input value="conservacion" />
 
         <input
@@ -104,8 +107,9 @@ const panelBg: Record<string, string> = {
 
         <!-- File upload -->
         <label class="block cursor-pointer">
-          <input type="file" name="imagen" accept="image/*" class="sr-only" />
+          <input type="file" name="imagen" accept="image/*" class="sr-only" data-file-input />
           <div
+            data-file-label
             class="w-full bg-c7 text-c1/60 py-5 text-center text-sm font-semibold opacity-50 hover:opacity-70 transition-opacity select-none"
           >
             {t.fields.subirImagen}
@@ -116,14 +120,17 @@ const panelBg: Record<string, string> = {
         <button
           type="submit"
           class="group inline-flex items-stretch self-start font-black text-base h-10 cursor-pointer"
+          data-submit-btn
         >
-          <span class="px-6 flex items-center border border-c2 text-c2 transition-colors duration-300 group-hover:bg-c2 group-hover:text-c1">
+          <span class="px-6 flex items-center border border-c2 text-c2 transition-colors duration-300 group-hover:bg-c2 group-hover:text-c1" data-submit-label>
             {t.submit}
           </span>
           <svg class="h-full w-auto" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M49.9924 25L33.486 35.6178C33.486 35.6178 33.2341 27.9696 22.9348 29.3619C11.9408 30.8497 14.2541 50 14.2541 50H0V0H14.2617C14.2617 0 11.9408 19.1563 22.9424 20.6381C33.2417 22.0304 33.4937 14.3822 33.4937 14.3822L50 25H49.9924Z" class="fill-c2 transition-colors duration-300"/>
           </svg>
         </button>
+
+        <p data-form-message class="hidden text-sm mt-1"></p>
       </form>
     </div>
 
@@ -180,21 +187,16 @@ const panelBg: Record<string, string> = {
   }
 </style>
 
-<script>
+<script define:vars={{ uiStrings, defaultFileLabel }} is:inline>
   function initContactForm() {
-    const tabGroup = document.querySelector<HTMLElement>("[data-tab-group]");
+    const tabGroup = document.querySelector("[data-tab-group]");
     if (!tabGroup) return;
 
-    const tabButtons = Array.from(
-      tabGroup.querySelectorAll<HTMLButtonElement>("[data-tab]")
-    );
-    const panels = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-img-panel]")
-    );
-    const tipoInput = document.querySelector<HTMLInputElement>("[data-tipo-input]");
+    const tabButtons = Array.from(tabGroup.querySelectorAll("[data-tab]"));
+    const panels = Array.from(document.querySelectorAll("[data-img-panel]"));
+    const tipoInput = document.querySelector("[data-tipo-input]");
 
-    function activate(key: string) {
-      // Update tab button classes
+    function activate(key) {
       tabButtons.forEach((btn) => {
         const isActive = btn.dataset.tab === key;
         btn.setAttribute("aria-selected", isActive ? "true" : "false");
@@ -202,7 +204,6 @@ const panelBg: Record<string, string> = {
         const activeClass   = btn.dataset.activeClass   ?? "";
         const inactiveClass = btn.dataset.inactiveClass ?? "";
 
-        // Remove both sets first, then apply the correct one
         activeClass.split(" ").forEach((c) => c && btn.classList.remove(c));
         inactiveClass.split(" ").forEach((c) => c && btn.classList.remove(c));
 
@@ -210,7 +211,6 @@ const panelBg: Record<string, string> = {
         apply.split(" ").forEach((c) => c && btn.classList.add(c));
       });
 
-      // Sync hidden input
       if (tipoInput) tipoInput.value = key;
 
       const activeIdx = tabButtons.findIndex((b) => b.dataset.tab === key);
@@ -223,7 +223,60 @@ const panelBg: Record<string, string> = {
     }
 
     tabButtons.forEach((btn) => {
-      btn.addEventListener("click", () => activate(btn.dataset.tab!));
+      btn.addEventListener("click", () => activate(btn.dataset.tab));
+    });
+
+    // File name display
+    const form = document.querySelector("[data-contact-form]");
+    if (!form) return;
+
+    const fileInput = form.querySelector("[data-file-input]");
+    const fileLabel = form.querySelector("[data-file-label]");
+    const submitBtn = form.querySelector("[data-submit-btn]");
+    const submitLabel = form.querySelector("[data-submit-label]");
+    const msgEl = form.querySelector("[data-form-message]");
+
+    fileInput?.addEventListener("change", () => {
+      const file = fileInput.files?.[0];
+      if (fileLabel) {
+        fileLabel.textContent = file
+          ? uiStrings.filePrefix + file.name
+          : defaultFileLabel;
+      }
+    });
+
+    // Fetch-based form submission
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (submitBtn) submitBtn.disabled = true;
+      if (submitLabel) submitLabel.textContent = uiStrings.sending;
+      if (msgEl) msgEl.classList.add("hidden");
+
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          body: new FormData(form),
+        });
+        const data = await res.json();
+
+        if (msgEl) {
+          msgEl.textContent = data.ok ? uiStrings.success : uiStrings.error;
+          msgEl.classList.remove("hidden");
+        }
+
+        if (data.ok) {
+          form.reset();
+          if (fileLabel) fileLabel.textContent = defaultFileLabel;
+        }
+      } catch {
+        if (msgEl) {
+          msgEl.textContent = uiStrings.error;
+          msgEl.classList.remove("hidden");
+        }
+      }
+
+      if (submitBtn) submitBtn.disabled = false;
+      if (submitLabel) submitLabel.textContent = uiStrings.submit;
     });
   }
 
