@@ -68,7 +68,9 @@
       "Bash(Remove-Item -Force \"apps/web/src/pages/[lang]/audiovisuales.astro\")",
       "Bash(Remove-Item -Force \"apps/web/src/pages/[lang]/conservamos.astro\")",
       "Bash(Remove-Item -Force \"apps/web/src/pages/[lang]/contacto.astro\")",
-      "Bash(Remove-Item -Force \"apps/web/src/pages/[lang]/galeria.astro\")"
+      "Bash(Remove-Item -Force \"apps/web/src/pages/[lang]/galeria.astro\")",
+      "PowerShell(cd \"c:\\\\Users\\\\frede\\\\Documents\\\\Clientes\\\\1_Websites\\\\Tovar\\\\fit-web-wip\"; $env:CI = \"true\"; pnpm install)",
+      "PowerShell(cmd /c \"rd /s /q \"\"c:\\\\Users\\\\frede\\\\Documents\\\\Clientes\\\\1_Websites\\\\Tovar\\\\fit-web-wip\\\\apps\"\"\")"
     ]
   }
 }

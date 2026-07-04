@@ -1,14 +1,11 @@
 {
+  "extends": "./node_modules/astro/tsconfigs/strict",
   "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "declaration": true,
-    "composite": true
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "exclude": ["node_modules", "**/node_modules", "**/dist", "**/.next"]
+  "include": ["**/*"],
+  "exclude": ["dist"]
 }
