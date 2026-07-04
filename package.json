@@ -8,7 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "typecheck": "astro check",
-    "pages:dev": "wrangler pages dev dist",
+    "cf:dev": "astro build && wrangler dev",
     "deploy": "astro build && wrangler deploy"
   },
   "dependencies": {
@@ -27,14 +27,6 @@
     "wrangler": "^4"
   },
   "engines": {
-    "node": ">=20.0.0",
-    "pnpm": ">=9.0.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "workerd",
-      "@parcel/watcher"
-    ]
+    "node": ">=20.0.0"
   }
 }
