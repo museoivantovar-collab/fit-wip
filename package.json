@@ -7,9 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "typecheck": "astro check",
-    "cf:dev": "astro build && wrangler dev",
-    "deploy": "astro build && wrangler deploy"
+    "typecheck": "astro check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -22,9 +20,6 @@
     "resend": "^6.17.1",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.7.2"
-  },
-  "devDependencies": {
-    "wrangler": "^4"
   },
   "engines": {
     "node": ">=20.0.0"
