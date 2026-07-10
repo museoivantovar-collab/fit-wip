@@ -34,10 +34,22 @@ const tabConfig: Record<string, { active: string; inactive: string }> = {
   },
 };
 
-const panelImg: Record<string, string> = {
-  conservacion: "/assets/form/form-img-conservacion.avif",
-  certificar:   "/assets/form/form-img-certificar.avif",
-  preguntas:    "/assets/form/form-img-preguntas.avif",
+const panelColor: Record<string, string> = {
+  conservacion: "bg-c2",
+  certificar:   "bg-c6",
+  preguntas:    "bg-c4",
+};
+
+const panelIcon: Record<string, string> = {
+  conservacion: "/assets/form/conservacion_icon.svg",
+  certificar:   "/assets/form/certificar_icon.svg",
+  preguntas:    "/assets/form/preguntas_icon.svg",
+};
+
+const panelIconClass: Record<string, string> = {
+  conservacion: "w-1/2 max-w-64 max-h-[240px] lg:max-h-none",
+  certificar:   "w-[420px]",
+  preguntas:    "w-[420px] max-h-[240px] lg:max-h-none",
 };
 
 ---
@@ -142,15 +154,9 @@ const panelImg: Record<string, string> = {
         <div
           data-img-panel={key}
           data-pos={String(i)}
-          class="absolute inset-0"
+          class={`absolute inset-0 flex items-center justify-center ${panelColor[key]}`}
         >
-          <img
-            src={panelImg[key]}
-            alt=""
-            class="w-full h-full object-cover"
-            loading="lazy"
-            decoding="async"
-          />
+          <img src={panelIcon[key]} alt="" class={panelIconClass[key]} aria-hidden="true" />
         </div>
       ))}
     </div>
